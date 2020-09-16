@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "node-sass": "^4.14.1"
   },
-  "devDependencies": {},
   "scripts": {
     "scss": "node-sass --watch style.scss style.css"
   },
