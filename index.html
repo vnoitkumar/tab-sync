@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tab Sync</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="toggle">
+        <input class="toggle-input" type="checkbox" />
+        <div class="toggle-bg"></div>
+        <div class="toggle-switch">
+          <div class="toggle-switch-figure"></div>
+          <div class="toggle-switch-figureAlt"></div>
+        </div>
+      </div>
+    </div>
+    <span class="credit">
+      Changing the theme in one tab will also change in all the other open tabs
+      of the same website using a service worker. Inspired by seeing this
+      <a
+        href="https://www.youtube.com/watch?v=9UNwHmagedE&t=749s&ab_channel=GoogleChromeDevelopers"
+        target="_blank"
+        rel="noopener noreferrer"
+        >YT video</a
+      >
+    </span>
+    <span class="credit">
+      <a href="https://vnoit.com" target="_blank" rel="noopener noreferrer"
+        >vnoit.com</a
+      >
+      |
+      <a
+        href="https://twitter.com/vnoitkumar"
+        target="_blank"
+        rel="noopener noreferrer"
+        >@vnoitkumar</a
+      >
+    </span>
+
+    <span class="credit">
+      Design Credit -
+      <a
+        href="https://codepen.io/jsndks/pen/qEXzOQ"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        Jason Tyler
+      </a>
+    </span>
+
+    <script>
+      function setBodyBg(toggleState) {
+        const bodyElement = document.getElementsByTagName('body')[0];
+        if (toggleState) {
+          bodyElement.classList.add('dark');
+          return;
+        }
+        bodyElement.classList.remove('dark');
+      }
+
+      const toggle = document.querySelector('.toggle-input');
+      const initialState = localStorage.getItem('toggleState') == 'true';
+      toggle.checked = initialState;
+      setBodyBg(toggle.checked);
+
+      toggle.addEventListener('change', function () {
+        const isChecked = toggle.checked;
+        setBodyBg(isChecked);
+        navigator.serviceWorker.controller.postMessage(isChecked);
+
+        localStorage.setItem('toggleState', isChecked);
+      });
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js').then(
+            function (registration) {
+              // Registration was successful
+              console.log(
+                'ServiceWorker registration successful with scope: ',
+                registration.scope
+              );
+            },
+            function (err) {
+              // registration failed :(
+              console.log('ServiceWorker registration failed: ', err);
+            }
+          );
+
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            console.log(`The service worker sent me a message: ${event.data}`);
+            if (toggle.checked !== event.data) {
+              toggle.checked = event.data;
+            }
+            setBodyBg(event.data);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
