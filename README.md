@@ -5,3 +5,6 @@ Changing the theme in one tab will also change in all the other open tabs of the
 [vnoit.com](https://vnoit.com) | [@vnoitkumar](https://twitter.com/vnoitkumar)
 
 Design Credit - [Jason Tyler](https://codepen.io/jsndks/pen/qEXzOQ)
+
+
+[![Tab Sync](https://github.com/vnoitkumar/tab-sync/blob/master/screenshot.png)](https://youtu.be/zgSmZUjXvk4)
